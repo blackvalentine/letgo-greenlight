@@ -52,3 +52,8 @@ func (app *application) editConflictResponse(w http.ResponseWriter, r *http.Requ
 	message := "the movie you are trying to update has been modified by another user"
 	app.errorResponse(w, r, http.StatusConflict, message)
 }
+
+func (app *application) rateLimitExceededResponse(w http.ResponseWriter, r *http.Request) {
+	message := "rate limit exceeded"
+	app.errorResponse(w, r, http.StatusTooManyRequests, message)
+}
