@@ -6,6 +6,7 @@ import (
 	"flag"
 	"log"
 	"os"
+	"sync"
 	"time"
 
 	"github.com/blackvalentine/letgo/internal/data"
@@ -45,6 +46,7 @@ type application struct {
 	logger *jsonlog.Logger
 	models data.Models
 	mailer mailer.Mailer
+	wg     sync.WaitGroup
 }
 
 func main() {
@@ -92,6 +94,7 @@ func main() {
 		logger: logger,
 		models: data.NewModels(db),
 		mailer: mailer,
+		wg:     sync.WaitGroup{},
 	}
 
 	err = app.serve(logger)
