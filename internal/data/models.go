@@ -3,6 +3,7 @@ package data
 import (
 	"database/sql"
 	"errors"
+	"time"
 )
 
 var (
@@ -22,17 +23,26 @@ type UserModelInterface interface {
 	Insert(user *User) error
 	GetByEmail(email string) (*User, error)
 	Update(user *User) error
+	GetForToken(scope string, tokenPlaintext string) (*User, error)
+}
+
+type TokenModelInterface interface {
+	New(userID int64, ttl time.Duration, scope string) (*Token, error)
+	Insert(token *Token) error
+	DeleteAllForUser(scope string, userID int64) error
 }
 
 type Models struct {
 	Movies MovieModelInterface
 	Users  UserModelInterface
+	Tokens TokenModelInterface
 }
 
 func NewModels(db *sql.DB) Models {
 	return Models{
 		Movies: MovieModel{DB: db},
 		Users:  UserModel{DB: db},
+		Tokens: TokenModel{DB: db},
 	}
 }
 
@@ -40,5 +50,6 @@ func NewMockModels() Models {
 	return Models{
 		Movies: &MockMovieModel{},
 		Users:  &MockUserModel{},
+		Tokens: &MockTokenModel{},
 	}
 }
