@@ -229,3 +229,13 @@ func (m *MockTokenModel) Insert(token *Token) error {
 func (m *MockTokenModel) DeleteAllForUser(scope string, userID int64) error {
 	return nil
 }
+
+type MockPermissionModel struct{}
+
+func (m *MockPermissionModel) GetAllForUser(userId int64) (Permissions, error) {
+	return nil, nil
+}
+
+func (m *MockPermissionModel) AddForUser(userId int64, codes ...string) error {
+	return nil
+}
