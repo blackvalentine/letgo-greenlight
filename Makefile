@@ -72,7 +72,7 @@ git_description = $(shell git describe --always --dirty)
 linker_flags = '-s -X main.buildTime=${current_time} -X main.version=${git_description}'
 build:
 	@echo 'Building cmd/api...'
-	go build -ldflags=${linker_flags} -o=./bin/api ./cmd/api
-	GOOS=linux GOARCH=amd64 go build -ldflags=${linker_flags} -o=./bin/api-linux-amd64 ./cmd/api
+	go build -ldflags="${linker_flags}" -o=./bin/api ./cmd/api
+	GOOS=linux GOARCH=amd64 go build -ldflags="${linker_flags}" -o=./bin/api-linux-amd64 ./cmd/api
 
 .PHONY: help server psql up down migration audit vendor build
