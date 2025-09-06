@@ -4,7 +4,6 @@ import (
 	"errors"
 	"expvar"
 	"fmt"
-	"net"
 	"net/http"
 	"slices"
 	"strconv"
@@ -15,6 +14,7 @@ import (
 	"github.com/blackvalentine/letgo/internal/data"
 	"github.com/blackvalentine/letgo/internal/validator"
 	"github.com/felixge/httpsnoop"
+	"github.com/tomasen/realip"
 	"golang.org/x/time/rate"
 )
 
@@ -57,11 +57,12 @@ func (app *application) rateLimit(next http.Handler) http.Handler {
 
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		if app.config.limiter.enable {
-			ip, _, err := net.SplitHostPort(r.RemoteAddr)
-			if err != nil {
-				app.serverErrorResponse(w, r, err)
-				return
-			}
+			// ip, _, err := net.SplitHostPort(r.RemoteAddr)
+			// if err != nil {
+			// 	app.serverErrorResponse(w, r, err)
+			// 	return
+			// }
+			ip := realip.FromRequest(r)
 
 			mu.Lock()
 
@@ -161,7 +162,7 @@ func (app *application) requirePermission(code string, next http.HandlerFunc) ht
 			app.serverErrorResponse(w, r, err)
 			return
 		}
-		
+
 		if !permissions.Include(code) {
 			app.notPermittedResponse(w, r)
 			return

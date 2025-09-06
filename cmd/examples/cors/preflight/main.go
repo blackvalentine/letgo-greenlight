@@ -6,8 +6,7 @@ import (
 	"net/http"
 )
 
-const html =
-`
+const html = `
 <!DOCTYPE html>
 <html lang="en">
 <head>
